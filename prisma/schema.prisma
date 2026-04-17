@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String?
+  email         String?      @unique
+  role          String       @default("USER") // USER, DEVELOPER, ADMIN
+  reviews       Review[]
+  submissions   Submission[]
+}
+
+model Tool {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String
+  shortDesc   String?
+  url         String
+  pricing     String    // FREE, FREEMIUM, PAID
+  imageUrl    String?
+  emoji       String?
+  rating      Float     @default(0)
+  isNew       Boolean   @default(false)
+  isTrending  Boolean   @default(false)
+  
+  category    String?
+  tags        String    @default("[]") // JSON representation of string array
+  features    String    @default("[]") // JSON
+  pros        String    @default("[]") // JSON
+  cons        String    @default("[]") // JSON
+
+  createdAt   DateTime  @default(now())
+  
+  categories  Category[] @relation("ToolCategories")
+  reviews     Review[]
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  tools Tool[] @relation("ToolCategories")
+}
+
+model Review {
+  id      String @id @default(cuid())
+  rating  Int
+  text    String
+  userId  String
+  toolId  String
+  user    User   @relation(fields: [userId], references: [id])
+  tool    Tool   @relation(fields: [toolId], references: [id])
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  summary     String?
+  source      String?
+  author      String?
+  readTime    String?
+  category    String?
+  emoji       String?
+  tags        String   @default("[]") // JSON representation
+  featured    Boolean  @default(false)
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+}
+
+model Submission {
+  id          String   @id @default(cuid())
+  toolName    String
+  description String
+  developerId String?
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  user        User?    @relation(fields: [developerId], references: [id])
+}
