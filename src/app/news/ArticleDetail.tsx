@@ -84,12 +84,3 @@ export default function ArticleDetail({ article, relatedArticles }: ArticleDetai
     </div>
   );
 }
-elated-title">{n.title}</div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
