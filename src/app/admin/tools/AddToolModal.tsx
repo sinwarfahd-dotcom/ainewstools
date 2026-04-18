@@ -49,7 +49,7 @@ export default function AddToolModal({ isOpen, onClose }: { isOpen: boolean, onC
     <div className="admin-modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="admin-modal-content">
         {/* Top Glow Accent */}
-        <div style={{ position: 'absolute', top: 0, insetX: 0, height: '2px', background: 'linear-gradient(90deg, transparent, var(--admin-emerald), transparent)', opacity: 0.5 }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, transparent, var(--admin-emerald), transparent)', opacity: 0.5 }} />
 
         <div className="admin-modal-header">
           <div>

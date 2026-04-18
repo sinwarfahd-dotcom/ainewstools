@@ -3,10 +3,11 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { getCatClass, getCatGrad } from './newsUtils';
+import { Article } from '@/types';
 
-export default function NewsClient({ initialNews }: { initialNews: any[] }) {
+export default function NewsClient({ initialNews }: { initialNews: Article[] }) {
   const newsData = initialNews;
-  const allCats = ["All", ...Array.from(new Set(newsData.map(n => n.cat)))];
+  const allCats = ["All", ...Array.from(new Set(newsData.map((n: Article) => n.cat)))];
 
   const [activeCat, setActiveCat] = useState("All");
   const [newsPage, setNewsPage] = useState(1);
@@ -16,7 +17,7 @@ export default function NewsClient({ initialNews }: { initialNews: any[] }) {
   const perPage = 8;
 
   const filteredNews = useMemo(() => {
-    let list = [...newsData].filter(n => {
+    let list = [...newsData].filter((n: Article) => {
       const matchCat = activeCat === "All" || n.cat === activeCat;
       const q = searchQuery.toLowerCase();
       const matchQ = !q || n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q) || n.source.toLowerCase().includes(q);
@@ -28,9 +29,9 @@ export default function NewsClient({ initialNews }: { initialNews: any[] }) {
     return list;
   }, [activeCat, searchQuery, sortBy]);
 
-  const featured = filteredNews.filter(n => n.featured).slice(0, 2);
-  const featuredIds = new Set(featured.map(f => f.id));
-  const filteredRest = filteredNews.filter(n => !featuredIds.has(n.id));
+  const featured = filteredNews.filter((n: Article) => n.featured).slice(0, 2);
+  const featuredIds = new Set(featured.map((f: Article) => f.id));
+  const filteredRest = filteredNews.filter((n: Article) => !featuredIds.has(n.id));
 
   const totalPages = Math.ceil(filteredRest.length / perPage);
   const paginated = filteredRest.slice((newsPage - 1) * perPage, newsPage * perPage);
@@ -153,13 +154,13 @@ export default function NewsClient({ initialNews }: { initialNews: any[] }) {
       </div>
 
       <div className="cat-tabs">
-        {allCats.map(c => (
+        {allCats.map((c: string) => (
           <div
             key={c}
             className={`tab ${activeCat === c ? 'active' : ''}`}
             onClick={() => { setActiveCat(c); setNewsPage(1); }}
           >
-            {c} <span style={{ opacity: 0.6 }}>{c === "All" ? newsData.length : newsData.filter(n => n.cat === c).length}</span>
+            {c} <span style={{ opacity: 0.6 }}>{c === "All" ? newsData.length : newsData.filter((n: Article) => n.cat === c).length}</span>
           </div>
         ))}
       </div>

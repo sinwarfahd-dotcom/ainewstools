@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 
 interface CompareTool {
-  id: number;
+  id: string;
   name: string;
   icon: string;
   category: string;

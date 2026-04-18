@@ -13,7 +13,10 @@ export default async function ToolsPage() {
   const formattedTools = tools.map((t) => ({
     id: t.id,
     name: t.name,
+    slug: t.slug,
     icon: t.emoji || "🛠️",
+    emoji: t.emoji || "🛠️",
+    imageUrl: t.imageUrl || null,
     cat: t.category || "General",
     pricing: t.pricing || "free",
     rating: t.rating || 0,

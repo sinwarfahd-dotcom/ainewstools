@@ -20,8 +20,8 @@ export default async function ComparePage() {
       icon: t.emoji || "🛠️",
       category: t.category || "General",
       pricing: t.pricing || "free",
-      rating: t.rating || 0,
-      features: tags,  // Use tags as feature list for comparison
+      rating: Number(t.rating) || 0,
+      features: tags,
       pros,
       cons,
     };

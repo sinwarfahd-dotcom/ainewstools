@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, ExternalLink, ArrowRight } from 'lucide-react';
+import { Tool, Article } from '@/types';
 
-export default function HomeClient({ initialTools, initialNews }: { initialTools: any[], initialNews: any[] }) {
+export default function HomeClient({ initialTools, initialNews }: { initialTools: Tool[], initialNews: Article[] }) {
   const tools = initialTools;
   const news = initialNews;
   const cats = [
@@ -28,7 +29,7 @@ export default function HomeClient({ initialTools, initialNews }: { initialTools
   const filteredTools = tools.filter(t => 
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     t.desc.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    t.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    t.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   useEffect(() => {
@@ -136,7 +137,7 @@ export default function HomeClient({ initialTools, initialNews }: { initialTools
                   </div>
                 </div>
                 <div className="tool-tags">
-                  {t.tags.slice(0,3).map(tag => (
+                  {t.tags.slice(0,3).map((tag: string) => (
                      <span key={tag} className="tool-tag">{tag}</span>
                   ))}
                 </div>

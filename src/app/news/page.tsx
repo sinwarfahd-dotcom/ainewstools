@@ -23,6 +23,7 @@ export default async function NewsPage() {
   
   const formattedNews = articles.map((n) => ({
     id: n.id,
+    slug: n.slug,
     emoji: n.emoji || "📰",
     cat: n.category || "General",
     title: n.title,

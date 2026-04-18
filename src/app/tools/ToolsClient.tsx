@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Search, Grid, List, ChevronDown, Plus, ExternalLink } from 'lucide-react';
+import { Tool, PricingPlan } from '@/types';
 
 const pricingOptions = ["All", "Free", "Freemium", "Paid", "Open Source"];
 const ratingOptions = [0, 4.5, 4, 3.5];
@@ -12,9 +13,9 @@ function getCatIcon(c: string) { const m: any = { All: "🔮", Chatbot: "💬", 
 function getPricingBadge(p: string) { const m: any = { free: "badge-free", paid: "badge-paid", freemium: "badge-freemium", "open-source": "badge-open" }; return m[p] || "badge-free"; }
 function getPricingLabel(p: string) { const m: any = { free: "Free", paid: "Paid", freemium: "Freemium", "open-source": "Open Source" }; return m[p.toLowerCase()] || p; }
 
-export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
+export default function ToolsClient({ initialTools }: { initialTools: Tool[] }) {
   const allTools = initialTools;
-  const categories = Array.from(new Set(allTools.map(t => t.cat)));
+  const categories = Array.from(new Set(allTools.map((t: Tool) => t.cat)));
 
   const searchParams = useSearchParams();
   const initialCat = searchParams.get('c') || "All";
@@ -27,8 +28,8 @@ export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("rating");
   
-  const [selectedToolId, setSelectedToolId] = useState<string | number | null>(null);
-  const selectedTool = selectedToolId ? allTools.find(x => x.id === selectedToolId) : null;
+  const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
+  const selectedTool = selectedToolId ? allTools.find((x: Tool) => x.id === selectedToolId) : null;
 
   // Sync category if URL changes (optional but good for UX)
   useEffect(() => {
@@ -48,12 +49,12 @@ export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
   const perPage = 12;
 
   const filteredTools = useMemo(() => {
-    let list = allTools.filter(t => {
+    let list = allTools.filter((t: Tool) => {
       const matchCat = activeCategory === "All" || t.cat === activeCategory;
       const matchPrice = activePricing === "all" || t.pricing === activePricing.toLowerCase().replace(" ", "-");
       const matchRating = t.rating >= activeRating;
       const q = searchQuery.toLowerCase();
-      const matchSearch = !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || t.tags.some(tag => tag.toLowerCase().includes(q));
+      const matchSearch = !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || t.tags.some((tag: string) => tag.toLowerCase().includes(q));
       return matchCat && matchPrice && matchRating && matchSearch;
     });
 
@@ -265,7 +266,7 @@ export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
                       </div>
                     </div>
                     <div className="tool-desc">{t.desc}</div>
-                    <div className="tool-tags">{t.tags.slice(0,3).map(tag => <span key={tag} className="tool-tag">{tag}</span>)}</div>
+                    <div className="tool-tags">{t.tags.slice(0,3).map((tag: string) => <span key={tag} className="tool-tag">{tag}</span>)}</div>
                     <div className="tool-footer" style={{marginTop: 'auto'}}>
                       <div style={{display:'flex', alignItems:'center', gap:'8px'}}>
                         <span className={`badge ${getPricingBadge(t.pricing)}`}>{getPricingLabel(t.pricing)}</span>
@@ -335,7 +336,7 @@ export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
               <div className="modal-section">
                 <div className="modal-section-title">Tags</div>
                 <div style={{display:'flex', gap:'6px', flexWrap:'wrap'}}>
-                  {selectedTool.tags.map(tag => <span key={tag} className="tool-tag" style={{fontSize:'12px', padding:'4px 10px'}}>{tag}</span>)}
+                  {selectedTool.tags.map((tag: string) => <span key={tag} className="tool-tag" style={{fontSize:'12px', padding:'4px 10px'}}>{tag}</span>)}
                 </div>
               </div>
 
@@ -343,8 +344,8 @@ export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
                 <div className="modal-section">
                   <div className="modal-section-title">Pros & Cons</div>
                   <div className="pros-cons">
-                    <div>{selectedTool.pros.map(p => <div key={p} className="pro-item">{p}</div>)}</div>
-                    <div>{selectedTool.cons?.map(c => <div key={c} className="con-item">{c}</div>)}</div>
+                    <div>{selectedTool.pros.map((p: string) => <div key={p} className="pro-item">{p}</div>)}</div>
+                    <div>{selectedTool.cons?.map((c: string) => <div key={c} className="con-item">{c}</div>)}</div>
                   </div>
                 </div>
               )}
@@ -353,7 +354,7 @@ export default function ToolsClient({ initialTools }: { initialTools: any[] }) {
                 <div className="modal-section">
                   <div className="modal-section-title">Pricing Plans</div>
                   <div className="pricing-table">
-                    {selectedTool.plans.map((p, i) => (
+                    {selectedTool.plans.map((p: PricingPlan, i: number) => (
                       <div key={p.name} className={`price-plan ${i === 1 ? 'popular' : ''}`}>
                         <div className="plan-name">{p.name}</div>
                         <div className="plan-price">{p.price}</div>
