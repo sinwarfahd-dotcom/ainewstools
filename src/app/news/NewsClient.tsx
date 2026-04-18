@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Trigger deployment
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
