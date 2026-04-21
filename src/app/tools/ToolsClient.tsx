@@ -171,6 +171,32 @@ export default function ToolsClient({ initialTools }: { initialTools: Tool[] }) 
         @media(max-width:700px){.sidebar{display:none}.main-layout{flex-direction:column}.tools-grid{grid-template-columns:1fr}}
       `}} />
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => { setIsMounted(true); }, []);
+
+  const ToolSkeleton = () => (
+    <div className="tool-card" style={{ opacity: 0.6, cursor: 'default' }}>
+      <div className="tool-top">
+        <div className="skeleton" style={{ width: '48px', height: '48px', borderRadius: '12px' }}></div>
+        <div style={{ flex: 1 }}>
+          <div className="skeleton" style={{ width: '60%', height: '16px', marginBottom: '8px' }}></div>
+          <div className="skeleton" style={{ width: '40%', height: '12px' }}></div>
+        </div>
+      </div>
+      <div className="skeleton" style={{ width: '100%', height: '40px', marginBottom: '16px' }}></div>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="skeleton" style={{ width: '60px', height: '20px', borderRadius: '100px' }}></div>
+        <div className="skeleton" style={{ width: '60px', height: '20px', borderRadius: '100px' }}></div>
+      </div>
+      <div className="tool-footer" style={{ marginTop: '20px' }}>
+        <div className="skeleton" style={{ width: '80px', height: '24px' }}></div>
+        <div className="skeleton" style={{ width: '60px', height: '24px' }}></div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
       <div className="page-header">
         <div className="page-title">AI Tools Directory</div>
         <div className="page-sub">Discover 1,200+ AI tools across every category — filtered, rated, and reviewed.</div>
@@ -244,7 +270,11 @@ export default function ToolsClient({ initialTools }: { initialTools: Tool[] }) 
             </div>
           </div>
 
-          {!paginatedTools.length ? (
+          {!isMounted ? (
+            <div className="tools-grid">
+              {[...Array(6)].map((_, i) => <ToolSkeleton key={i} />)}
+            </div>
+          ) : !paginatedTools.length ? (
             <div className="empty">
               <div className="empty-icon">🔍</div>
               <div>No tools found matching your filters.</div>
@@ -254,7 +284,6 @@ export default function ToolsClient({ initialTools }: { initialTools: Tool[] }) 
             <div className="tools-grid">
               {paginatedTools.map((t, i) => (
                 <div key={t.id} style={{height: '100%'}}>
-                  {/* === DARK CARD === */}
                   <div className={`tool-card ${i < 2 && currentPage === 1 ? 'featured' : ''}`} onClick={() => setSelectedToolId(t.id)} style={{height: '100%'}}>
                     {i < 2 && currentPage === 1 && <div className="featured-badge">Featured</div>}
                     <div className="tool-top">

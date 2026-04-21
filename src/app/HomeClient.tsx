@@ -32,24 +32,40 @@ export default function HomeClient({ initialTools, initialNews }: { initialTools
     t.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    setIsMounted(true);
+    
     const animateCount = (setFn: any, end: number) => {
       let start = 0;
-      const step = Math.ceil(end / 50);
+      const duration = 2000; // 2 seconds
+      const steps = 60;
+      const stepIncrement = end / steps;
+      const intervalTime = duration / steps;
+
       const t = setInterval(() => {
-        start = Math.min(start + step, end);
-        setFn(start);
-        if (start >= end) clearInterval(t);
-      }, 30);
+        start += stepIncrement;
+        if (start >= end) {
+          setFn(Math.floor(end));
+          clearInterval(t);
+        } else {
+          setFn(Math.floor(start));
+        }
+      }, intervalTime);
     };
 
-    setTimeout(() => {
-      animateCount(setCounter1, 1200);
+    const timer = setTimeout(() => {
+      animateCount(setCounter1, 1247); // Real count or target
       animateCount(setCounter2, 850);
-      animateCount(setCounter3, 45);
+      animateCount(setCounter3, 46);
       animateCount(setCounter4, 95);
-    }, 300);
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
+
+  if (!isMounted) return null; // Avoid hydration flash for stats
 
   return (
     <>
